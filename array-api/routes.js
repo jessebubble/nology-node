@@ -1,22 +1,23 @@
 import Router from "express";
-import { getTheBoys, getTheBoysById, postTheBoys, deleteTheBoys } from "./controllers/theboys-controller.js"
+import { addStudent, deleteStudentById, getStudentById, getStudents } from "./controllers/studentController.js";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    getTheBoys(req, res);
+    getStudents(req, res);
 });
 
 router.get("/:id", (req, res) => {
-    getTheBoysById(req, res);
+    getStudentById(req, res);
 });
 
 router.post("/", (req, res) => {
-    postTheBoys(req, res);
+    addStudent(req, res);
 });
 
 router.delete("/:id", (req, res) => {
-    deleteTheBoys(req, res);
+    deleteStudentById(req, res);
 });
+    
 
 export default router;
