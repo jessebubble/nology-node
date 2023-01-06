@@ -1,37 +1,56 @@
-const studentsArray = ["elton", "rocketman", "john", "eltonjohn"];
+import { Student } from "../models/student.js";
 
 export const getStudents = (req, res) => {
-    res.status(200).send({
-        message: "Here are the students",
-        students: studentsArray,
-    });
+    Student.findAll()
+        .then((students) => {
+            res.status(200).send(students);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Something went wrong");
+        });
 }
-
 export const getStudentById = (req, res) => {
     const id = parseInt(req.params.id);
-
-    if (id > studentsArray.length) {
-        res.status(404).send("Student not found");
-    }
-    else {
-        res.status(200).send({
-            student: studentsArray[id],
+    Student.findByPk(id)
+        .then((student) => {
+            res.status(200).send(student);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Something went wrong");
         });
-    }   
 }
 
 export const addStudent = (req, res) => {
-    studentsArray.push(req.body.student);
-    res.status(201).send("Student added successfully");
+    Student.create({
+        name: req.body.name,
+        email: req.body.email,
+    })
+        .then(() => {
+            res.status(201).send({
+                message: "Student added successfully",
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Something went wrong");
+        });
 }
 
 export const deleteStudentById = (req, res) => {
     const id = parseInt(req.params.id);
-
-    if (id > studentsArray.length) {
-        res.status(404).send("Student not found");
-    } else {
-        studentsArray.splice(id, 1);
-        res.status(200).send("Student deleted successfully");
-    }
+    Student.findByPk(id)
+        .then((student) => {
+            student.destroy({
+                where: {id: id},
+            });
+        })
+        .then(() => {
+            res.status(200).send("Student deleted successfully");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send("Something went wrong");
+        });
 }

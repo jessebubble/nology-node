@@ -1,10 +1,18 @@
 import express from "express";
 import bodyParser from "body-parser";
-
 import router from "./routes.js";
+import { sequelize } from "./db/index.js";
 
 const app = express();
 const port = 3010;
+
+sequelize.sync()
+    .then((result) => {
+        console.log(result)
+    })
+    .catch((err) => {
+        console.log(err)
+    });
 
 app.listen(3010, (req, res) => {
     console.log(`Server is running on port ${port}`);
